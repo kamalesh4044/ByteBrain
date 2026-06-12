@@ -27,6 +27,23 @@ class AIService {
     }
   }
 
+  async deleteModelCache(): Promise<boolean> {
+    try {
+      const keys = await caches.keys();
+      let deleted = false;
+      for (const key of keys) {
+        if (key.toLowerCase().includes('webllm') || key.toLowerCase().includes('huggingface') || key.toLowerCase().includes('model')) {
+          await caches.delete(key);
+          deleted = true;
+        }
+      }
+      return deleted;
+    } catch (err) {
+      console.error('Failed to clear cache', err);
+      return false;
+    }
+  }
+
   interrupt(): void {
     if (this.engine) {
       this.engine.interruptGenerate();

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Menu, Plus, MessageSquare, Image as ImageIcon, Send, Square, User, Bot, FileText, Settings, Loader2, X } from 'lucide-react';
+import { Menu, Plus, MessageSquare, Image as ImageIcon, Send, Square, User, Bot, FileText, Settings, Loader2, X, Trash2, HardDrive, Cpu } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { aiService } from './services/ai';
 import { parseImage, parsePDF } from './services/documentParser';
@@ -20,6 +20,10 @@ function App() {
   // File upload state
   const [attachedFiles, setAttachedFiles] = useState<{name: string, text: string}[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+
+  // Settings State
+  const [showSettings, setShowSettings] = useState(false);
+  const [cacheStatus, setCacheStatus] = useState<string>('');
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,6 +68,17 @@ function App() {
   const handleStop = () => {
     aiService.interrupt();
     setIsGenerating(false);
+  };
+
+  const handleClearCache = async () => {
+    setCacheStatus('Clearing...');
+    const deleted = await aiService.deleteModelCache();
+    if (deleted) {
+      setCacheStatus('Cache cleared successfully!');
+    } else {
+      setCacheStatus('No cache found or failed to clear.');
+    }
+    setTimeout(() => setCacheStatus(''), 3000);
   };
 
   const handleSend = async () => {
@@ -142,7 +157,7 @@ function App() {
             <Menu size={20} />
           </button>
           {sidebarOpen && (
-            <button className="icon-btn">
+            <button className="icon-btn" onClick={() => setShowSettings(true)}>
               <Settings size={20} />
             </button>
           )}
@@ -212,13 +227,26 @@ function App() {
                <div className="avatar ai">
                   <Bot size={20} color="#fff" />
                 </div>
-                <div className="message-content" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Loader2 size={16} className="lucide-spin" /> {engineState.status}
+                <div className="message-content" style={{ display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(99, 102, 241, 0.05)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                  
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 500, color: '#c7d2fe' }}>
+                    <Cpu size={16} className="lucide-spin" /> Preparing Local AI Engine
                   </div>
-                  <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--bg-primary)', borderRadius: '2px', overflow: 'hidden' }}>
-                    <div style={{ width: `${Math.max(5, engineState.progress * 100)}%`, height: '100%', backgroundColor: '#6366f1', transition: 'width 0.3s' }}></div>
+                  
+                  <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                    {engineState.status.includes('cache') ? (
+                      <span style={{ color: '#10b981' }}>⚡ Using high-speed local cache memory...</span>
+                    ) : (
+                      <span>Downloading model securely to your browser...</span>
+                    )}
+                    <br />
+                    <span style={{ opacity: 0.8 }}>{engineState.status}</span>
                   </div>
+
+                  <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--bg-primary)', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ width: `${Math.max(2, engineState.progress * 100)}%`, height: '100%', backgroundColor: '#6366f1', transition: 'width 0.3s ease-out' }}></div>
+                  </div>
+                  
                 </div>
             </div>
           )}
@@ -297,6 +325,39 @@ function App() {
           </p>
         </div>
       </main>
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="modal-overlay" onClick={() => setShowSettings(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 className="modal-title">Settings</h3>
+              <button className="icon-btn" onClick={() => setShowSettings(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div style={{ marginTop: '24px' }}>
+              <h4 style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <HardDrive size={16} /> Storage Management
+              </h4>
+              <div style={{ background: 'var(--bg-secondary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: '1.5' }}>
+                  ByteBrain downloads the AI model (~1.8 GB) directly to your browser's local cache so it can run securely offline. If you need to free up space on your hard drive, you can clear this cache.
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: cacheStatus.includes('success') ? '#10b981' : 'var(--text-primary)' }}>
+                    {cacheStatus || 'Manage AI Model Cache'}
+                  </span>
+                  <button className="danger-btn" onClick={handleClearCache}>
+                    <Trash2 size={16} /> Delete Cache
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
