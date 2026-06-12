@@ -48,7 +48,7 @@ class AIService {
     }
 
     const messages = [
-      { role: "system" as const, content: "You are Lumina, a helpful, precise, and encouraging AI Study Companion. Answer the user's questions clearly. If they provide reference material (notes/PDF text), base your answers strictly on that material." },
+      { role: "system" as const, content: "You are ByteBrain, a helpful, precise, and encouraging AI Study Companion. Answer the user's questions clearly. If they provide reference material (notes/PDF text), base your answers strictly on that material." },
       { role: "user" as const, content: prompt }
     ];
 

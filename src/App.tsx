@@ -180,14 +180,14 @@ function App() {
               <Menu size={20} />
             </button>
           )}
-          <h2 style={{ fontSize: '18px', fontWeight: 600 }}>Lumina <span style={{fontSize: '12px', padding: '2px 6px', background: 'var(--bg-tertiary)', borderRadius: '12px', marginLeft: '8px', color: '#10b981'}}>Local AI</span></h2>
+          <h2 style={{ fontSize: '18px', fontWeight: 600 }}>ByteBrain <span style={{fontSize: '12px', padding: '2px 6px', background: 'var(--bg-tertiary)', borderRadius: '12px', marginLeft: '8px', color: '#10b981'}}>Local AI</span></h2>
         </header>
 
         {/* Chat Area */}
         <div className="chat-area">
           {messages.length === 0 ? (
             <div className="hero">
-              <h1>Hello, I'm Lumina.</h1>
+              <h1>Hello, I'm ByteBrain.</h1>
               <p>Your private, in-browser AI Study Companion. How can I help you learn today?</p>
             </div>
           ) : (
@@ -293,7 +293,7 @@ function App() {
             )}
           </div>
           <p style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-secondary)', marginTop: '12px' }}>
-            Lumina runs locally in your browser. All your data stays private.
+            ByteBrain runs locally in your browser. All your data stays private.
           </p>
         </div>
       </main>

@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# ByteBrain 🧠
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ByteBrain is a fully private, in-browser AI Study Companion. It runs powerful LLMs (Large Language Models) directly on your local device's GPU using WebLLM, meaning zero server costs, zero API keys, and 100% privacy.
 
-Currently, two official plugins are available:
+![ByteBrain UI](public/screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features ✨
 
-## React Compiler
+- **100% Private & Local:** Runs completely in your browser. Your notes, questions, and data never leave your device.
+- **Smart Document Parsing:** Upload PDFs and Images. ByteBrain uses `pdfjs-dist` and `tesseract.js` to extract text instantly.
+- **Hardware Accelerated:** Powered by WebGPU and `@mlc-ai/web-llm` to deliver blazing-fast AI responses using your local graphics card.
+- **Beautiful UI:** A premium, dark-mode, glassmorphic interface built with React and custom CSS.
+- **Non-blocking Worker:** Heavy AI processing is offloaded to a WebWorker so the UI remains perfectly smooth while the AI thinks.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack 🛠️
 
-## Expanding the ESLint configuration
+- **Frontend:** React, TypeScript, Vite
+- **AI Engine:** WebLLM (Phi-3-mini-4k-instruct)
+- **Document Processing:** PDF.js (PDFs), Tesseract.js (Images/OCR)
+- **Icons:** Lucide React
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started 🚀
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/kamalesh4044/ByteBrain.git
+   ```
+2. Navigate into the directory and install dependencies:
+   ```bash
+   cd ByteBrain
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open your browser and navigate to `http://localhost:5173`. 
+   *(Note: The first time you ask a question, ByteBrain will download the AI model to your browser's local cache. Subsequent visits will load instantly!)*
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Deployment
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+ByteBrain can be hosted entirely for free on platforms like Vercel or Netlify. Since all AI processing happens on the client's device, backend hosting is strictly static!
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Built with ❤️ for better studying.*
